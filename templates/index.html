@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Station Météo Agricole — AgroTic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">🌾</span>
+      <div>
+        <h1>AgroMétéo</h1>
+        <p class="subtitle">Station de surveillance IoT — AgroTic </p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="alerte-compteurs" id="alerteCompteurs" style="display:none;">
+        <span class="compteur-critique" id="cptCritique">0 critique</span>
+        <span class="compteur-warning"  id="cptWarning">0 warning</span>
+      </div>
+      <div class="status-badge" id="statusBadge">
+        <span class="dot"></span>
+        <span id="statusText">Connexion...</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div id="banniereAlerte" class="banniere-alerte" style="display:none;">
+  <span>🚨</span>
+  <span id="banniereTexte"></span>
+  <button onclick="document.getElementById('banniereAlerte').style.display='none'">✕</button>
+</div>
+
+<main class="container">
+
+  <section class="controls-bar">
+    <div class="control-group">
+      <label for="selectParcelle">Parcelle</label>
+      <select id="selectParcelle" onchange="chargerTout()">
+        <option value="">Toutes les parcelles</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="selectType">Type de capteur</label>
+      <select id="selectType" onchange="chargerMesures()">
+        <option value="">Tous les types</option>
+        <option value="temperature">Température</option>
+        <option value="humidite">Humidité</option>
+        <option value="ph_sol">pH du sol</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="selectLimite">Afficher</label>
+      <select id="selectLimite" onchange="chargerMesures()">
+        <option value="50">50 mesures</option>
+        <option value="100" selected>100 mesures</option>
+        <option value="200">200 mesures</option>
+      </select>
+    </div>
+    <button class="btn-refresh" id="btnRefresh" onclick="chargerTout()">
+      <span id="refreshIcon">↻</span> Rafraîchir
+    </button>
+  </section>
+
+  <section class="stats-grid" id="statsGrid">
+    <div class="stat-card loading">Chargement...</div>
+  </section>
+
+  <section class="reco-section">
+    <h2 class="section-title">🤖 Recommandations agronomiques en temps réel</h2>
+    <div class="reco-grid" id="recoGrid">
+      <div class="reco-card loading">Chargement...</div>
+    </div>
+  </section>
+
+  <section class="tabs-section">
+    <div class="tabs">
+      <button class="tab active" data-tab="mesures">📊 Mesures</button>
+      <button class="tab" data-tab="alertes">🚨 Alertes <span id="badgeAlertes" class="badge" style="display:none;"></span></button>
+      <button class="tab" data-tab="anomalies">⚠️ Anomalies</button>
+      <button class="tab" data-tab="graphique">📈 Graphique</button>
+      <button class="tab" data-tab="agregation">🔬 Agrégation</button>
+    </div>
+
+    <div id="tab-mesures" class="tab-content active">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Horodatage</th><th>Capteur</th><th>Parcelle</th>
+              <th>Type</th><th>Valeur</th><th>Unité</th><th>État</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyMesures">
+            <tr><td colspan="7" class="empty">Chargement...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-alertes" class="tab-content">
+      <div class="filtres-alertes">
+        <button class="btn-filtre active" id="fAll"      onclick="filtrerAlertes('')">Toutes</button>
+        <button class="btn-filtre"        id="fCritique" onclick="filtrerAlertes('critique')">🔴 Critiques</button>
+        <button class="btn-filtre"        id="fWarning"  onclick="filtrerAlertes('warning')">🟡 Avertissements</button>
+      </div>
+      <div id="alertesListe" class="alertes-liste">
+        <div class="empty">Chargement des alertes...</div>
+      </div>
+    </div>
+
+    <div id="tab-anomalies" class="tab-content">
+      <div class="anomalie-info">
+        <span>⚠️</span>
+        Détection : humidité inférieure à <strong>30 %</strong>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Horodatage</th><th>Capteur</th><th>Parcelle</th><th>Humidité</th><th>Niveau</th></tr>
+          </thead>
+          <tbody id="tbodyAnomalies">
+            <tr><td colspan="5" class="empty">Chargement...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-graphique" class="tab-content">
+      <div class="graph-controls">
+        <div class="control-group">
+          <label for="selectCapteurGraph">Capteur</label>
+          <select id="selectCapteurGraph"></select>
+        </div>
+        <div class="control-group">
+          <label for="selectHeures">Fenêtre</label>
+          <select id="selectHeures">
+            <option value="6">6 heures</option>
+            <option value="12">12 heures</option>
+            <option value="24" selected>24 heures</option>
+            <option value="48">48 heures</option>
+          </select>
+        </div>
+        <button class="btn-secondary" onclick="chargerGraphique()">Afficher</button>
+      </div>
+      <div class="chart-container">
+        <canvas id="chartEvolution"></canvas>
+        <p id="chartEmpty" class="empty" style="display:none;">Pas encore assez de données.</p>
+      </div>
+    </div>
+
+    <div id="tab-agregation" class="tab-content">
+      <p class="section-desc">
+        Agrégation — Moyenne, min et max de température par parcelle sur <strong>24h</strong>.
+      </p>
+      <div id="agregCards" class="agreg-grid">
+        <div class="agreg-card loading">Chargement...</div>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<footer class="footer">
+  AgroTic — TP Internet des Objets &nbsp;|&nbsp; MongoDB + Python Flask + Alertes intelligentes
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
