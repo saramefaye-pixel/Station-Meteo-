@@ -1,0 +1,185 @@
+/* ═══════════════════════════════════════════
+   login.css — Page de connexion AgroMétéo
+   ═══════════════════════════════════════════ */
+
+:root {
+  --vert-fonce:  #1a3a2a;
+  --vert-moyen:  #2d6a4f;
+  --vert-clair:  #52b788;
+  --vert-pale:   #d8f3dc;
+  --creme:       #f8f4e8;
+  --ambre:       #e9c46a;
+  --blanc:       #ffffff;
+  --texte:       #1a2e1f;
+  --texte-doux:  #4a6355;
+  --rouge:       #e63946;
+  --radius:      16px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vert-fonce);
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(82,183,136,0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(45,106,79,0.2) 0%, transparent 50%);
+}
+
+.login-bg {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  min-height: 100vh;
+}
+
+.login-card {
+  background: var(--blanc);
+  border-radius: var(--radius);
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+}
+
+/* ── En-tête ── */
+.login-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.login-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 0 10px rgba(82,183,136,0.4));
+}
+.login-header h1 {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.8rem;
+  color: var(--vert-fonce);
+  margin-bottom: 4px;
+}
+.login-header p {
+  font-size: 0.82rem;
+  color: var(--texte-doux);
+  font-weight: 300;
+}
+
+/* ── Erreur ── */
+.login-erreur {
+  background: #fff0f0;
+  border: 1px solid #ffaaaa;
+  border-left: 4px solid var(--rouge);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  color: #8b0000;
+  margin-bottom: 20px;
+}
+
+/* ── Formulaire ── */
+.login-form { display: flex; flex-direction: column; gap: 18px; }
+
+.champ { display: flex; flex-direction: column; gap: 6px; }
+.champ label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--texte-doux);
+}
+.champ input {
+  font-family: 'Sora', sans-serif;
+  font-size: 0.95rem;
+  padding: 11px 14px;
+  border: 1.5px solid #dde8e0;
+  border-radius: 10px;
+  background: var(--creme);
+  color: var(--texte);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+.champ input:focus {
+  outline: none;
+  border-color: var(--vert-moyen);
+  box-shadow: 0 0 0 3px rgba(45,106,79,0.12);
+}
+
+.input-pwd { position: relative; }
+.input-pwd input { padding-right: 44px; width: 100%; }
+.input-pwd button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px;
+  opacity: 0.6;
+}
+.input-pwd button:hover { opacity: 1; }
+
+.btn-login {
+  font-family: 'Sora', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 13px;
+  background: var(--vert-moyen);
+  color: var(--blanc);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  margin-top: 4px;
+}
+.btn-login:hover  { background: var(--vert-fonce); transform: translateY(-1px); }
+.btn-login:active { transform: translateY(0); }
+
+/* ── Comptes rapides ── */
+.login-comptes {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #e8f0e8;
+}
+.login-comptes p {
+  font-size: 0.75rem;
+  color: var(--texte-doux);
+  text-align: center;
+  margin-bottom: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.comptes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.compte-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 6px;
+  border: 1.5px solid #dde8e0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.compte-item:hover {
+  border-color: var(--vert-clair);
+  background: var(--vert-pale);
+  transform: translateY(-2px);
+}
+.compte-item span  { font-size: 1.4rem; }
+.compte-item strong { font-size: 0.8rem; color: var(--texte); }
+.compte-item small  { font-size: 0.68rem; color: var(--texte-doux); }

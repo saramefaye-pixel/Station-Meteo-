@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connexion — AgroMétéo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/static/login.css"/>
+</head>
+<body>
+  <div class="login-bg">
+    <div class="login-card">
+      <div class="login-header">
+        <span class="login-icon">🌾</span>
+        <h1>AgroMétéo</h1>
+        <p>Station de surveillance IoT</p>
+      </div>
+
+      {% if erreur %}
+      <div class="login-erreur">⚠️ {{ erreur }}</div>
+      {% endif %}
+
+      <form method="POST" action="/login" class="login-form">
+        <div class="champ">
+          <label for="username">Nom d'utilisateur</label>
+          <input type="text" id="username" name="username"
+                 placeholder="admin / sokhna / rose"
+                 autocomplete="username" required/>
+        </div>
+        <div class="champ">
+          <label for="mot_de_passe">Mot de passe</label>
+          <div class="input-pwd">
+            <input type="password" id="mot_de_passe" name="mot_de_passe"
+                   placeholder="••••••••"
+                   autocomplete="current-password" required/>
+            <button type="button" onclick="togglePwd()" id="btnPwd">👁</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-login">Se connecter →</button>
+      </form>
+
+      <div class="login-comptes">
+        <p>Comptes disponibles :</p>
+        <div class="comptes-grid">
+          <div class="compte-item" onclick="remplir('admin','admin123')">
+            <span>👨‍💼</span><strong>admin</strong><small>Administrateur</small>
+          </div>
+          <div class="compte-item" onclick="remplir('sokhna','sokhna123')">
+            <span>👩‍🌾</span><strong>sokhna</strong><small>Utilisatrice</small>
+          </div>
+          <div class="compte-item" onclick="remplir('rose','rose123')">
+            <span>👩‍🌾</span><strong>rose</strong><small>Utilisatrice</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function togglePwd() {
+      const i = document.getElementById('mot_de_passe');
+      i.type = i.type === 'password' ? 'text' : 'password';
+    }
+    function remplir(u, p) {
+      document.getElementById('username').value = u;
+      document.getElementById('mot_de_passe').value = p;
+    }
+  </script>
+</body>
+</html>

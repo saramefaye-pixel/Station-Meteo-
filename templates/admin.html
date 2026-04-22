@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Administration — AgroMétéo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/static/style.css"/>
+  <link rel="stylesheet" href="/static/admin.css"/>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">🌾</span>
+      <div>
+        <h1>AgroMétéo <span class="badge-admin">ADMIN</span></h1>
+        <p class="subtitle">Panneau d'administration</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="user-info">{{ avatar }} {{ nom_complet }}</span>
+      <a href="/logout" class="btn-logout">Déconnexion</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- ── Cartes statistiques ── -->
+  <section class="admin-section">
+    <h2 class="section-title">📊 Statistiques globales du système</h2>
+    <div class="admin-stats" id="adminStats">
+      <div class="admin-stat-card loading">Chargement...</div>
+    </div>
+  </section>
+
+  <!-- ── Utilisateurs connectés ── -->
+  <section class="admin-section">
+    <h2 class="section-title">👥 Utilisateurs connectés en ce moment</h2>
+    <div id="sessionsListe" class="sessions-liste">
+      <div class="empty">Chargement...</div>
+    </div>
+    <p class="admin-note">💡 Se rafraîchit toutes les 10 secondes</p>
+  </section>
+
+  <!-- ── Collections MongoDB ── -->
+  <section class="admin-section">
+    <h2 class="section-title">🗄️ État des collections MongoDB</h2>
+    <div class="collections-grid" id="collectionsGrid">
+      <div class="loading">Chargement...</div>
+    </div>
+  </section>
+
+  <!-- ── Alertes récentes ── -->
+  <section class="admin-section">
+    <h2 class="section-title">🚨 20 dernières alertes (toutes parcelles)</h2>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>Heure</th><th>Niveau</th><th>Parcelle</th><th>Titre</th><th>Recommandation</th></tr>
+        </thead>
+        <tbody id="tbodyAlertesAdmin">
+          <tr><td colspan="5" class="empty">Chargement...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── Actions admin ── -->
+  <section class="admin-section">
+    <h2 class="section-title">🔧 Actions d'administration</h2>
+    <div class="actions-grid">
+      <div class="action-card">
+        <div class="action-icon">🧹</div>
+        <h3>Nettoyer les anciennes mesures</h3>
+        <p>Supprime les mesures de plus de 7 jours pour libérer de l'espace.</p>
+        <button class="btn-action danger" onclick="viderMesures()">
+          Supprimer les mesures &gt; 7 jours
+        </button>
+        <div id="msgVider" class="action-msg"></div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">🔄</div>
+        <h3>Rafraîchir toutes les données</h3>
+        <p>Force la mise à jour de toutes les statistiques et alertes.</p>
+        <button class="btn-action" onclick="chargerTout()">Rafraîchir maintenant</button>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">🌐</div>
+        <h3>Accéder au dashboard</h3>
+        <p>Voir l'interface utilisateur de la station météo.</p>
+        <a href="/dashboard" class="btn-action">Ouvrir le dashboard</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  AgroTIC L2 — Administration — MongoDB + Python Flask
+</footer>
+
+<script src="/static/admin.js"></script>
+</body>
+</html>
