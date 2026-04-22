@@ -1,4 +1,4 @@
-# 🌾 Station Météo Agricole — AgroTic L1
+# 🌾 Station Météo Agricole — AgroTic L2
 ## TP Internet des Objets — MongoDB + Python + Flask
 
 ---
@@ -97,7 +97,7 @@ python main.py
 Vous devriez voir :
 ```
 =======================================================
-  🌾  Station Météo Agricole — AgroTic L1
+  🌾  Station Météo Agricole — AgroTic L2
 =======================================================
 
 🔌  Connexion à MongoDB...
@@ -184,6 +184,6 @@ pip list        # Doit montrer flask et pymongo
 ---
 
 ## 👩‍💻 Auteur
-Projet réalisé dans le cadre du TP IoT — Licence 1 AgroTic
+Projet réalisé dans le cadre du TP IoT — Licence 2 AgroTic
 UFR SFI — Université Sine Saloum El Hadj Ibrahima Niass
 Année académique 2024–2025
